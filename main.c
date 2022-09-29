@@ -137,12 +137,15 @@ int selectTest(List* tests){
         ListElement* e = tests->head;
         c = sel == 0 ? "->" : "--";
         color = sel == 0 ? 10 : 15;
-        printColored(console, color, "%s%s\n", c, "All tests");
-        i = 1;
+        printColored(console, color, "%s%s\n", c, "Run manual test");
+        c = sel == 1 ? "->" : "--";
+        color = sel == 1 ? 10 : 15;
+        printColored(console, color, "%s%s\n", c, "Run all tests");
+        i = 2;
         while(e !=NULL){
             c = sel == i ? "->" : "--";
             color = sel == i ? 10 : 15;
-            printColored(console, color, "%sTest %d: %s\n", c, i, ((Test*)e->data)->description);
+            printColored(console, color, "%sTest %d: %s\n", c, i-1, ((Test*)e->data)->description);
             e = e->next;
             i++;
         }
@@ -152,7 +155,7 @@ int selectTest(List* tests){
             if(ch == 27) return -1;
         }
         ch = _getch();
-        if(ch == 80 && sel < tests->size) sel++;
+        if(ch == 80 && sel < tests->size+1) sel++;
         if(ch == 72 && sel > 0) sel--;
     }
 }
@@ -223,6 +226,7 @@ void printLegend(){
     printf("\n-> red chars means that program expected other char in this place");
     printf("\n-> '-' red char means that there is not enough chars in the output");
     printf("\n-> '_' red char means that there is space in the output but expected other char");
+    printf("\n-> \"... is not recognized as an inter...\" - probably program was not compilated successfully and there is no .exe file ://");
     SetConsoleTextAttribute(console, 15);
 }
 
@@ -283,6 +287,12 @@ void runAllTests(List* tests, char* dir, char* fileName){
     printColored(console, 9, "Summary of tests:\nPassed: %d/%d\nFailed: %d/%d\n", passed, tests->size, tests->size-passed, tests->size);
 }
 
+void runManualTest(char* dir, char* filename){
+    printColored(console, 9, "Now is running: %s\\%s.exe\n", dir, filename);
+    printColored(console, 9, "You can write input below:\n");
+    runCommand(5, "\"src\\", dir, "\\", filename, ".exe\" 1");
+}
+
 void testLoop(List* tests, char* dir, char* filename){
     int sel, ch;
     while(1){
@@ -290,10 +300,13 @@ void testLoop(List* tests, char* dir, char* filename){
         if(sel == -1) return;
         system("cls");
         if(sel == 0){
+            runManualTest(dir, filename);
+        }else if(sel == 1){
             runAllTests(tests, dir, filename);
+            //RUN test manually
         }else{
             ListElement* el = tests->head;
-            for(int i = 0;i<sel-1;i++) el = el->next;
+            for(int i = 0;i<sel-2;i++) el = el->next;
             Test* test = el->data;
             printColored(console, 9, "Running single test with %d ID :\n", test->ID);
             printColored(console, 9, "Test description: ");
@@ -318,10 +331,19 @@ void testLoop(List* tests, char* dir, char* filename){
 }
 
 int compileProgram(char* dir, char* filename){
-    runCommand(6, "cd src\\", dir, " & gcc ", filename, ".c -o", filename);
+    runCommand(7, "cd src\\", dir, " & gcc ", filename, ".c -o ", filename, " 2> logs");
+    FILE* logs = readFile(createString(3, "src\\", dir, "\\logs"));
+    char line[LINE_SIZE];
+    int len = readFileLine(logs, line);
+    closeFile(logs);
+    if(len > 5){
+        return -1; 
+    }
+    else return 1;
 }
 
-//TODO parsing path argument from command line prompt run
+
+// //TODO parsing path argument from command line prompt run
 int main() {
     console = GetStdHandle(STD_OUTPUT_HANDLE);
     system("cd src & dir > ..\\tmp");
@@ -338,7 +360,22 @@ int main() {
         FILE* testsFile = getTestsFile(dir);
         char filename[LINE_SIZE];
         List* tests = getTests(testsFile, filename);
-        compileProgram(dir, filename);
+        if(compileProgram(dir, filename) != 1){
+            system("cls");
+            printColored(console, 4, "Compilation returned that logs!!\n");
+            FILE* logs = readFile(createString(3, "src\\", dir, "\\logs"));
+            char line[LINE_SIZE];
+            int len = readFileLine(logs, line);
+            while(len > 5){
+                printf("%s\n", line);
+                len = readFileLine(logs, line);
+            }
+            closeFile(logs);
+            printColored(console, 4, "!! If in logs is error information program won't be working properly or will run PREVIOUS compilated version !!\n");
+            printf("If you want, that was saved in logs file in %s directory :)\nRemember, best c program has no errors and warnings :P\n", dir);
+            printf("Enter any key for skip that information:");
+            getch();
+        }
         testLoop(tests, dir, filename);
         freeList(tests);
     }

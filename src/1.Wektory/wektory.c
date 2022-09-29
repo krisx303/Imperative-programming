@@ -79,7 +79,7 @@ void print_vector(const double v[], int n) {
 void test_1(){
 	int len, start, stop;
 	double vector[N];
-	printDebug("LINSPACE: Wpisz liczby: start, stop, n ");
+	printDebug("LINSPACE: Wpisz liczby: n, start, stop ");
 	len = readInt();
 	start = readDouble();
 	stop = readDouble();
@@ -137,7 +137,9 @@ void test_5(){
 	print_vector(vector, len);
 }
 
-int main(){
+int main(int argc, char* args[]){
+	if(argc > 1 && args[1][0] == '1')
+		TEST = 1;
     printDebug("Wpisz numer testu [1, 5]: ");
     int test = readInt();
     Test tests[] = {test_1, test_2, test_3, test_4, test_5};

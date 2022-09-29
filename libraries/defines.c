@@ -1,6 +1,6 @@
 
 //! Jeśli równe 1 to zostaną wyświetlone podpowiedzi w konsoli podczas wpisywania i wypisywania informacji
-#define TEST 0
+int TEST = 0;
 
 #define BUFFER_SIZE 512
 #define LINE_SIZE 128

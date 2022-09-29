@@ -30,5 +30,23 @@ Program during running creates 3 files in his folder:
 * tmp (for storage information about dir output command)
 * tmpin (for storage temporary input for test)
 * tmpout (for storage temporary output for test)
+* logs (in test directory for storage compilation logs)
 
 Of course if you want you could remove then after closing program but they are neccesery during running :)
+
+Program offers automatic and manually testing.
+For automatic you have to write any output to testing file.
+For example: 
+
+Enter your name: 
+
+Christopher
+
+In tests file line "Enter your name:" must be to properly working.
+But you can avoid that, writing your code for automatic and manually tests.
+When it is manually, for help enter input hints like 'Enter your name' are necessary.
+But for automatic tests you don't have to see that. 
+So best idea is that add optionaly program argument 0 or 1.
+This program has implemented that all. 1 is for manually testing and 0 (which is default) for automatic testing.
+
+I know, my English is very poor but i am learning all the time :)
