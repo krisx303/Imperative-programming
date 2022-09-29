@@ -1,12 +1,17 @@
+# Imperative programming in C language
+This repository contains my exercises for college classes (in folders 1. 2.1. 2.2. ...). In the main directory is a testing system created by myself to make testing easier. 
+
+
 # Automatic testing C programs
 
 In every subfolder are located excercises written in C.
 But in one subfolder can't be more then one program to run. This is because name of folder is also name of the test inside directory. To propely run testing you have to write one more file named: tests.test in which will be include tests.
 
 For example, you have to write program that write Hello World to output. 
-1. On start, you must create dictionary for program (which name will be displayed in testing program as program name). 
-2. After you finish writing the code you save it as hello.c file. You don't have to compile it to .exe because program automaticly do it for you :). 
-3. At the end create in that dictionary file tests.test with such build:
+1. If you don't have src directory, create it in main folder. 
+2. On start, you must a create dictionary for the program (which name will be displayed in the testing program as the program name). 
+3. After you finish writing the code, you save it as a hello.c file. You don't have to compile it to .exe because the program automaticly does it for you :).
+4. Finally, add tests to that dictionary file. test with such a build:
 
 > <pre>
 > hello                   (#0 name of c file to test)

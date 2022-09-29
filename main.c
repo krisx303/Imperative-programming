@@ -7,11 +7,12 @@
 #include "libraries/inout.c"
 #include "libraries/doublelinkedlist.c"
 #include "libraries/cmd_dir.c"
+#include <stdarg.h>
 
 typedef struct Test{
     int ID;
-    char* input;
-    char* output;
+    List* input;
+    List* output;
     char* description;
 } Test;
 
@@ -20,10 +21,22 @@ Test* initTest(){
     if(node == NULL){
         exit(MEMORY_ALLOCATION_ERROR);
     }
+    node->input = initList();
+    node->output = initList();
+    node->input->freeElementData = freeString;
+    node->output->freeElementData = freeString;
+    if(node->input == NULL || node->output == NULL){
+        exit(MEMORY_ALLOCATION_ERROR);
+    }
     return node;
 }
 
-void freeTest(void* data){}
+void freeTest(void* data){
+    Test* test = (Test*)data;
+    freeList(test->input);
+    freeList(test->output);
+    free(test->description);
+}
 
 HANDLE console;
 
@@ -54,14 +67,17 @@ int selectDir(List* dirs){
     }
 }
 
-FILE* getTestsFile(char* dir){
-    char *name = calloc(11 + strlen(dir),sizeof(char));
-    char end[] = "\\tests.test";
-    strcat(name, dir);
-    strcat(name, end);
-    FILE* tests = readFile(name);
+FILE* getTestsFile(char* dir){    
+    char* path = createString(3, "src\\", dir, "\\tests.test");
+    FILE* tests = readFile(path);
     return tests;
 }
+
+#define WAIT 0
+#define INPUT 1
+#define OUTPUT 2
+#define TESTNAME 3
+#define ENDOF -1
 
 List* getTests(FILE* file, char* filename){
     List* tests = initList();
@@ -70,21 +86,42 @@ List* getTests(FILE* file, char* filename){
     char line[LINE_SIZE];
     int id = 1;
     readFileLine(file, filename);
+    int inputType = WAIT;
+    int first = 1;
+    Test* test;
     while(1){
         len = readFileLine(file, line);
-        if(len == 1) break;
-        Test* test = initTest();
-        test->ID = id;
-        test->description = copyString(line, len);
-        //* INPUT
-        len = readFileLine(file, line);
-        test->input = copyString(line, len);
-        //* OUTPUT
-        len = readFileLine(file, line);
-        test->output = copyString(line, len);
-        id++;
-        pushBack(tests, test);
+        if(line[0] == '#'){
+            if(stringEq(line, "#TEST")){
+                if(first){
+                    first = 0;
+                    test = initTest();
+                }
+                else{
+                    pushBack(tests, test);
+                    test = initTest();
+                }
+                test->ID = id;
+                id++;
+                inputType = TESTNAME;
+            }else if(stringEq(line, "#INPUT")){
+                inputType = INPUT;
+            }else if(stringEq(line, "#OUTPUT")){
+                inputType = OUTPUT;
+            }else if(stringEq(line, "#EOF")){
+                break;
+            }
+        }else{
+            if(inputType == TESTNAME){
+                test->description = copyString(line, len);
+            }else if(inputType == INPUT){
+                pushBack(test->input, copyString(line, len));
+            }else if(inputType == OUTPUT){
+                pushBack(test->output, copyString(line, len));
+            }
+        }
     }
+    pushBack(tests, test);
     closeFile(file);
     return tests;
 }
@@ -134,25 +171,100 @@ char* getTestCommand(char* dir, char* fileName){
     return command;
 }
 
-int runSingleTest(Test* test, char* command, int printout){
+void printDiff(char* exp, char* given){
+    int n = strlen(exp);
+    int m = strlen(given);
+    int printedChars = 0, overflow = 0;
+    int overtype = -1;
+    if(n == m){
+        printedChars = n;
+        overflow = 0;
+    }else if(n < m){
+        printedChars = n;
+        overflow = m - n;
+        overtype = 1;
+    }else{
+        printedChars = m;
+        overflow = n - m;
+        overtype = 2;
+    }
+    for(int i = 0;i<printedChars;i++){
+        if(given[i] != exp[i]){
+            if(given[i] == 32){
+                given[i] = '_';
+            }
+            printColored(console, 4, "%c", given[i]);
+        }
+        else
+            printf("%c", given[i]);
+    }
+    SetConsoleTextAttribute(console, 4);
+    char c;
+    if(overtype == 1){
+        for(int i = 0;i<overflow;i++){
+            c = given[n+i];
+            if(c == 32)
+                c = '_';
+            printf("%c", c);
+        }
+    }
+    else if(overtype == 2){
+        for(int i = 0;i<overflow;i++){
+            printf("-");
+        }
+    }
+    SetConsoleTextAttribute(console, 15);
+    printf("\n");
+}
+
+void printLegend(){
+    SetConsoleTextAttribute(console, 5);
+    printf("\nLegend:");
+    printf("\n-> red chars means that program expected other char in this place");
+    printf("\n-> '-' red char means that there is not enough chars in the output");
+    printf("\n-> '_' red char means that there is space in the output but expected other char");
+    SetConsoleTextAttribute(console, 15);
+}
+
+int runSingleTest(Test* test, char* dir, char* filename, int printout){
     FILE* tmpin = writeFile("tmpin");
-    fprintf(tmpin, "%s", test->input);
+    ListElement* el = test->input->head;
+    for(int i = 0;i<test->input->size; i++){
+        fprintf(tmpin, "%s", (char*) el->data);
+        if(i < test->input->size-1) fprintf(tmpin, "\n");
+        el = el->next;
+    }
     closeFile(tmpin);
-    system(command);
+    runCommand(5, "type tmpin | \"src\\", dir, "\\", filename, ".exe\" > tmpout");
     FILE* tmpout = readFile("tmpout");
     char line[BUFFER_SIZE];
-    readFileLine(tmpout, line);
-    int a = strcmp(test->output, line);
-    if(printout){
-        printColored(console, 9, "Test Output:    %s\n", line);
+    int passed = 1, len = 0, p = 0;
+    el = test->output->head;
+    if(printout) {
+        printColored(console, 9, "Test Output:\n");
+    }
+    for(int i = 0;i<test->output->size;i++){
+        len = readFileLine(tmpout, line);
+        p = strcmp((char*)(el->data), line);
+        if(p != 0){
+            passed = 0;
+            if(printout)
+                printDiff(el->data, line);
+            break;
+        }else{
+            if(printout)
+                printf("%s\n", line);
+        }
+        el = el->next;
     }
     printColored(console, 9, "Test %d: ", test->ID);
-    if(a == 0){
+    if(passed == 1){
         printColored(console, 10, "[PASSED]\n");
     }else{
         printColored(console, 4, "[FAILED]\n");
+        printLegend();
     }
-    return a;
+    return passed;
 }
 
 void runAllTests(List* tests, char* dir, char* fileName){
@@ -164,7 +276,7 @@ void runAllTests(List* tests, char* dir, char* fileName){
     Test* test;
     while(element != NULL){
         test = (Test*)element->data;
-        pass = runSingleTest(test, command, 0);
+        pass = runSingleTest(test, dir, fileName, 0);
         if(pass == 0) passed++;
         element = element->next;
     }
@@ -174,32 +286,50 @@ void runAllTests(List* tests, char* dir, char* fileName){
 void testLoop(List* tests, char* dir, char* filename){
     int sel, ch;
     while(1){
-    sel = selectTest(tests);
-    if(sel == -1) return;
-    system("cls");
-    if(sel == 0){
-        runAllTests(tests, dir, filename);
-    }else{
-        ListElement* el = tests->head;
-        for(int i = 0;i<sel-1;i++) el = el->next;
-        Test* test = el->data;
-        printColored(console, 9, "Running single test with %d ID :\n", test->ID);
-        printColored(console, 9, "Test description: %s\nTest Input: %s\nCorrect Output: %s\n", test->description, test->input, test->output);
-        runSingleTest(test, getTestCommand(dir, filename), 1);
+        sel = selectTest(tests);
+        if(sel == -1) return;
+        system("cls");
+        if(sel == 0){
+            runAllTests(tests, dir, filename);
+        }else{
+            ListElement* el = tests->head;
+            for(int i = 0;i<sel-1;i++) el = el->next;
+            Test* test = el->data;
+            printColored(console, 9, "Running single test with %d ID :\n", test->ID);
+            printColored(console, 9, "Test description: ");
+            printf("%s\n", test->description);
+            printColored(console, 9, "Test Input:\n");
+            ListElement* line = test->input->head;
+            for(int i = 0;i<test->input->size;i++){
+                printf("%s\n", line->data);
+                line = line->next;
+            }
+            printColored(console, 9, "Expected Output:\n");
+            line = test->output->head;
+            for(int i = 0;i<test->output->size;i++){
+                printf("%s\n", line->data);
+                line = line->next;
+            }
+            runSingleTest(test, dir, filename, 1);
+        }
+        ch = getc(stdin);
+        if(ch == 27) return;
     }
-    ch = getc(stdin);
-    if(ch == 27) return;
-    }
+}
+
+int compileProgram(char* dir, char* filename){
+    runCommand(6, "cd src\\", dir, " & gcc ", filename, ".c -o", filename);
 }
 
 //TODO parsing path argument from command line prompt run
 int main() {
     console = GetStdHandle(STD_OUTPUT_HANDLE);
-    dir("");
+    system("cd src & dir > ..\\tmp");
     List* dirs = getAllDirs(false);
     if(dirs->size == 0) exit(0);
+    int sel = 0;
     while(1){
-        int sel = selectDir(dirs);
+        sel = selectDir(dirs);
         if(sel == -1) exit(EXIT_PROGRAM);
         char* dir;
         ListElement* e = dirs->head;
@@ -208,6 +338,7 @@ int main() {
         FILE* testsFile = getTestsFile(dir);
         char filename[LINE_SIZE];
         List* tests = getTests(testsFile, filename);
+        compileProgram(dir, filename);
         testLoop(tests, dir, filename);
         freeList(tests);
     }

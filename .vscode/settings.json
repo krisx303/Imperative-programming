@@ -30,6 +30,7 @@
   ],
   "files.associations": {
     "*.inc": "ini",
+    "*.htc": "dart",
     "*.tcc": "c",
     "cstdlib": "c",
     "system_error": "c",
@@ -59,6 +60,7 @@
     "sstream": "c",
     "stdexcept": "c",
     "utility": "c",
-    "windows.h": "c"
+    "windows.h": "c",
+    "stdarg.h": "c"
   }
 }
