@@ -66,6 +66,30 @@ void readIntArray(int tab[], int n){
   }
 }
 
+//* Funkcja pobierająca z terminala zmienną liczbową wyświetlając podaną podpowiedź
+int readIntHint(char* hint){
+  printDebug(hint);
+  int n = 0;
+  scanf("%d", &n);
+  return n;
+}
+
+//* Funkcja pobierająca z terminala liczbę zmiennoprzecinkową wyświetlając podaną podpowiedź
+double readDoubleHint(char* hint){
+  printDebug(hint);
+  double n = 0;
+  scanf("%lf", &n);
+  return n;
+}
+
+//* Funkcja pobierająca z terminala pojedyńczy znak wyświetlając podaną podpowiedź
+char readCharHint(char* hint){
+  printDebug(hint);
+  char c = ' ';
+  scanf("%c", &c);
+  return c;
+}
+
 //* Funkcja czytająca plik o wskazanej nazwie.
 //! Pamiętaj o fclose() po zakończeniu pracy ze streamem!
 FILE* readFile(char* name){
