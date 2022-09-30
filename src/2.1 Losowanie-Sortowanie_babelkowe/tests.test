@@ -1,0 +1,20 @@
+sortowanie
+#TEST
+3 Random numbers
+#INPUT
+1 100 3 30
+#OUTPUT
+4 15 14 
+#TEST
+Random permutation
+#INPUT
+2 20 10
+#OUTPUT
+3 7 0 6 8 5 4 2 1 9 
+#TEST
+Bubble sort
+#INPUT
+3 20 10
+#OUTPUT
+7
+#EOF
