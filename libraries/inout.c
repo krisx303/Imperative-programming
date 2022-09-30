@@ -141,6 +141,18 @@ FILE* getStreamByTest(char* name){
   }
 }
 
+//* Funckja zwracająca stream stdin lub stream z pliku o wskazanej nazwie
+//! Pamiętaj o closeStreamByTest() po zakończeniu pracy ze streamem!
+FILE* getStreamFromInputOrStdByTest(){
+  if(TEST){
+    return stdin;
+  }else{
+    char name[100];
+    scanf("%s", name);
+    return readFile(name);
+  }
+}
+
 //* Funkcja zamykająca otwarty wcześniej stream danych
 void closeStreamByTest(FILE* stream){
   if(TEST){
