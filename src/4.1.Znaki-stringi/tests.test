@@ -2,14 +2,14 @@ znaki
 #TEST
 wc test1.test
 #INPUT
-1 src\\4.Znaki-stringi\\test1.test
+1 src\\4.1.Znaki-stringi\\test1.test
 #OUTPUT
 4 8 43
 #TEST
 Char count 
 #INPUT
 2 
-src\\4.Znaki-stringi\\test1.test
+src\\4.1.Znaki-stringi\\test1.test
 1
 #OUTPUT
 n 5
@@ -17,7 +17,7 @@ n 5
 Digram count
 #INPUT
 3
-src\\4.Znaki-stringi\\test1.test
+src\\4.1.Znaki-stringi\\test1.test
 1
 #OUTPUT
 in 3
@@ -25,7 +25,7 @@ in 3
 Comments count
 #INPUT
 4
-src\\4.Znaki-stringi\\test2.test
+src\\4.1.Znaki-stringi\\test2.test
 #OUTPUT
 2 1
 #EOF
