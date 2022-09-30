@@ -1,0 +1,32 @@
+statystyka
+#TEST
+Average and Wariation from array
+#INPUT
+1 7 5 87 22 45 33 78 1
+#OUTPUT
+38.71 969.35
+#TEST
+Bernoulli'e
+#INPUT
+2 2 20 70
+#OUTPUT
+0 0 1 1 1 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 
+#TEST
+Discrete probability distribution
+#INPUT
+3 2 1000
+#OUTPUT
+3.10 5.50 6.00 11.60 15.20 17.10 12.80 10.60 9.40 5.20 3.50 
+#TEST
+Cumulative Distribution Function
+#INPUT
+4 2 100
+#OUTPUT
+3.00 6.00 8.00 20.00 32.00 53.00 73.00 81.00 93.00 98.00 100.00 
+#TEST
+Monty Hall
+#INPUT
+5 2 200
+#OUTPUT
+132 66.00 68 34.00
+#EOF

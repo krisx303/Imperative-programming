@@ -66,6 +66,13 @@ void readIntArray(int tab[], int n){
   }
 }
 
+//* Funkcja pobierająca z terminala n liczb i zapisująca je do tablicy tab 
+void readDoubleArray(double tab[], int n){
+  for(int i = 0;i<n;i++){
+    tab[i] = readDouble();
+  }
+}
+
 //* Funkcja pobierająca z terminala zmienną liczbową wyświetlając podaną podpowiedź
 int readIntHint(char* hint){
   printDebug(hint);
