@@ -1,0 +1,17 @@
+wojna
+#TEST
+Simplified mode - B wins
+#INPUT
+123 0 1000
+#OUTPUT
+3
+10 3 7 3 A K 4 3 J 6 K 9 5 3 9 7 6 5 A Q 7 4 K Q J 9 8 6 A 8 8 5 10 4 5 2 10 4 J 10 9 2 A K Q J Q 7 2 8 2 
+#TEST
+Simplified mode - Draw
+#INPUT
+2137 0 100
+#OUTPUT
+0
+34
+18
+#EOF

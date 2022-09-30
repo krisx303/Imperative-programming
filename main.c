@@ -266,7 +266,8 @@ int runSingleTest(Test* test, char* dir, char* filename, int printout){
         printColored(console, 10, "[PASSED]\n");
     }else{
         printColored(console, 4, "[FAILED]\n");
-        printLegend();
+        if(printout)
+            printLegend();
     }
     return passed;
 }
