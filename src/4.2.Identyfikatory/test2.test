@@ -1,0 +1,14 @@
+/* 
+This program do nothing, it is just for testing.
+***************  / / / / /
+*///asdsadsfsad
+
+char getHashChar(){
+    return '#';
+}
+
+int main(){
+    char hash = getHashChar();
+    printf("this is hash char: %c", hash);
+    return 0;
+}

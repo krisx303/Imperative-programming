@@ -1,0 +1,14 @@
+identyfikatory
+#TEST
+First test
+#INPUT
+src\\4.2.Identyfikatory\\test.test
+#OUTPUT
+2
+#TEST
+Second test
+#INPUT
+src\\4.2.Identyfikatory\\test2.test
+#OUTPUT
+4
+#EOF
