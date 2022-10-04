@@ -175,10 +175,15 @@ char* getTestCommand(char* dir, char* fileName){
 }
 
 void printDiff(char* exp, char* given){
-    int n = strlen(exp);
+    int n = 0;
     int m = strlen(given);
+    if(exp == NULL){
+        n = m;
+    }else{
+        n = strlen(exp);
+    }
     int printedChars = 0, overflow = 0;
-    int overtype = -1;
+    int overtype = -1; 
     if(n == m){
         printedChars = n;
         overflow = 0;
@@ -190,6 +195,13 @@ void printDiff(char* exp, char* given){
         printedChars = m;
         overflow = n - m;
         overtype = 2;
+    }
+
+    if(exp == NULL){
+        overflow = printedChars;
+        printedChars = 0;
+        overtype = 1;
+        n = 0;
     }
     for(int i = 0;i<printedChars;i++){
         if(given[i] != exp[i]){
@@ -260,6 +272,13 @@ int runSingleTest(Test* test, char* dir, char* filename, int printout){
                 printf("%s\n", line);
         }
         el = el->next;
+    }
+    while(1){
+        len = readFileLine(tmpout, line);
+        if(len == 1){
+            break;
+        }
+        printDiff(NULL, line);
     }
     printColored(console, 9, "Test %d: ", test->ID);
     if(passed == 1){
