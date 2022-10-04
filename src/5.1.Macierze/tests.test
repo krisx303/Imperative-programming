@@ -1,0 +1,32 @@
+macierze
+#TEST
+Sorting
+#INPUT
+0
+3
+#OUTPUT
+auto
+break
+case
+#TEST
+Matrix product
+#INPUT
+1
+2 3
+1 2 3 10 20 30
+3 2
+11 23 1 1.5 -2 0
+#OUTPUT
+7.0000 26.0000 
+70.0000 260.0000 
+#TEST
+Gauss simplified
+#INPUT
+2
+3
+1 2 3
+9 8 7
+1 0 0
+#OUTPUT
+-10.0000
+#EOF
