@@ -273,6 +273,7 @@ int runSingleTest(Test* test, char* dir, char* filename, int printout){
         }
         el = el->next;
     }
+    if(printout)
     while(1){
         len = readFileLine(tmpout, line);
         if(len == 1){
