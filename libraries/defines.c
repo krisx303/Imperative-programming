@@ -3,7 +3,7 @@
 int TEST = 0;
 
 #define BUFFER_SIZE 512
-#define LINE_SIZE 128
+#define LINE_SIZE 256
 #define MEMORY_ALLOCATION_ERROR  -1
 #define DATA_FOUND                1
 #define DATA_NOT_FOUND           -1
