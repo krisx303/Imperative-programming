@@ -1,0 +1,26 @@
+sortowanie
+#TEST
+Quick sort
+#INPUT
+1
+#OUTPUT
+-31 0 1 2 2 4 65 83 99 782 
+#TEST
+Words sorting
+#INPUT
+2
+#OUTPUT
+ant bat bear cat dog frog leopard man monkey rabbit 
+#TEST
+Structure sorting
+#INPUT
+3
+#OUTPUT
+BAT nietoperz Man czlowiek ant mrowka bear niedzwiedz cat kot dog pies frog zaba leopard lampart monkey malpa rabbit krolik 
+#TEST
+Submission sorting
+#INPUT
+4
+#OUTPUT
+Anna Stone 15 Katarzyna Michalak 20 Kamila Munk 25 Anastazja Kamiska 28 Malgorzata Kowal 33 Ernest Goja 27 Emil Kant 22 Stefan Kowal 36 Kamil Mist 29 Tomasz Nod 18 Karol Wodecki 27 
+#EOF
