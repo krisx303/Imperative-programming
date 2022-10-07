@@ -1,0 +1,83 @@
+wektory
+#TEST
+Int vector
+#INPUT
+1
+12
+p 10
+p 20
+p 5
+p 3
+p 15
+i 0 30
+i 4 40
+i 7 50
+e 4 10
+e 4 20
+r 6
+f
+#OUTPUT
+6
+30 5 3 50 0 0 
+#TEST
+Char vector
+#INPUT
+2
+10
+p a
+p X
+p k
+p i
+p y
+p R
+i 1 t
+i 3 G
+i 5 E
+d
+#OUTPUT
+16
+t X G k R 
+#TEST
+Person vector
+#INPUT
+3
+8
+p 23 Dominik Adamczyk
+p 27 Natalia Adamiak
+p 24 Marcin Chudy
+i 1 29 Anna Cichocka
+i 4 22 Natalia Deyna
+i 0 24 Marcin Bereta
+d
+s
+#OUTPUT
+8
+24 Marcin Bereta
+24 Marcin Chudy
+23 Dominik Adamczyk
+22 Natalia Deyna
+#TEST
+Final test
+#INPUT
+3
+13
+p 23 Dominik Adamczyk
+p 27 Natalia Adamiak
+p 25 Jan Augustyn
+p 24 Kacper Augustyn
+p 23 Ewelina Badeja
+i 0 22 Jakub Barber
+i 1 24 Kacper Barczynski
+i 3 21 Dorota Bujak
+e 0 22 Jakub Barber
+e 1 24 Kacper Augustyn
+d
+f
+s
+#OUTPUT
+4
+25 Jan Augustyn
+24 Kacper Barczynski
+23 Ewelina Badeja
+21 Dorota Bujak
+#EOF
