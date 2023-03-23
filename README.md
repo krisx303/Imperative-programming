@@ -49,4 +49,23 @@ But for automatic tests you don't have to see that.
 So best idea is that add optionaly program argument 0 or 1.
 This program has implemented that all. 1 is for manually testing and 0 (which is default) for automatic testing.
 
+# Main menu
+
+Poruszanie się strzałkami (góra/dół)
+
+![image](https://user-images.githubusercontent.com/57154118/227188813-d7f303e4-5f4a-492d-a408-52d51af24b25.png)
+
+# Single exercise menu
+
+![image](https://user-images.githubusercontent.com/57154118/227189128-17b9d06e-9366-45d2-bb95-7534b18bf0ea.png)
+
+# Manual testing
+
+![image](https://user-images.githubusercontent.com/57154118/227190351-bef42a9d-229f-4516-99f3-562e2d2db310.png)
+
+# Automatic testing (single test)
+
+![image](https://user-images.githubusercontent.com/57154118/227190469-2c9fe19e-682f-47c5-bf55-839c27a5e5d6.png)
+
+
 I know, my English is very poor but i am learning all the time :)
