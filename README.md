@@ -49,6 +49,8 @@ But for automatic tests you don't have to see that.
 So best idea is that add optionaly program argument 0 or 1.
 This program has implemented that all. 1 is for manually testing and 0 (which is default) for automatic testing.
 
+You don't have to reset testing program after each src changes, but you have to return to main menu panel.
+
 # Main menu
 
 Poruszanie się strzałkami (góra/dół)
@@ -67,5 +69,16 @@ Poruszanie się strzałkami (góra/dół)
 
 ![image](https://user-images.githubusercontent.com/57154118/227190469-2c9fe19e-682f-47c5-bf55-839c27a5e5d6.png)
 
+# Automatic testing (All tests summary)
+
+![image](https://user-images.githubusercontent.com/57154118/227199899-64595f72-fe1e-46d5-ac20-8a7abe2b3cf2.png)
+
+# Error handling
+
+![image](https://user-images.githubusercontent.com/57154118/227200205-91912ca1-b5bf-43eb-a40d-a453ad16fe76.png)
+
+# Showing differences between program output and expected output
+
+![image](https://user-images.githubusercontent.com/57154118/227200772-5dcf4841-12a7-4370-82a3-62f8b1dd8d43.png)
 
 I know, my English is very poor but i am learning all the time :)
